@@ -5,196 +5,759 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Aujuda — plataforma para cadastrar e buscar animais perdidos." />
   <meta name="theme-color" content="#f7fbff" />
+
   <title>Aujuda — encontre, cadastre, reencontre</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* =========================================
+       USUÁRIO LOGADO
+       ========================================= */
+
+    #userGreeting {
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+      color: #536066;
+      white-space: nowrap;
+      align-items: center;
+      gap: 4px;
+    }
+
+    #userGreeting:not([hidden]) {
+      display: flex;
+    }
+
+    #userGreeting strong {
+      color: #111;
+      font-weight: 800;
+    }
+
+    /* Garante que o campo personalizado
+       realmente desapareça */
+    #customSpeciesWrap[hidden] {
+      display: none !important;
+    }
+  </style>
 </head>
+
 <body>
+
   <div class="cursor-glow" aria-hidden="true"></div>
   <div class="page-grid" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
 
+
+  <!-- =========================================
+       HEADER
+       ========================================= -->
+
   <header class="site-header" id="topo">
+
     <a class="brand" href="#topo" aria-label="Aujuda - início">
+
       <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 64 64" role="img"><path d="M32 7c8 0 13 6 13 13 0 4-2 8-5 10 9 2 15 8 15 16 0 7-6 11-14 11H23C15 57 9 53 9 46c0-8 6-14 15-16-3-2-5-6-5-10 0-7 5-13 13-13Z" fill="currentColor" opacity=".14"/><circle cx="19" cy="18" r="6" fill="currentColor"/><circle cx="45" cy="18" r="6" fill="currentColor"/><circle cx="11" cy="32" r="5" fill="currentColor"/><circle cx="53" cy="32" r="5" fill="currentColor"/><path d="M32 28c-9 0-16 6-16 14 0 6 5 10 12 8 3-1 5-1 8 0 7 2 12-2 12-8 0-8-7-14-16-14Z" fill="currentColor"/></svg>
+
+        <svg viewBox="0 0 64 64" role="img">
+
+          <path
+            d="M32 7c8 0 13 6 13 13 0 4-2 8-5 10 9 2 15 8 15 16 0 7-6 11-14 11H23C15 57 9 53 9 46c0-8 6-14 15-16-3-2-5-6-5-10 0-7 5-13 13-13Z"
+            fill="currentColor"
+            opacity=".14"
+          />
+
+          <circle cx="19" cy="18" r="6" fill="currentColor"/>
+          <circle cx="45" cy="18" r="6" fill="currentColor"/>
+          <circle cx="11" cy="32" r="5" fill="currentColor"/>
+          <circle cx="53" cy="32" r="5" fill="currentColor"/>
+
+          <path
+            d="M32 28c-9 0-16 6-16 14 0 6 5 10 12 8 3-1 5-1 8 0 7 2 12-2 12-8 0-8-7-14-16-14Z"
+            fill="currentColor"
+          />
+
+        </svg>
+
       </span>
+
       <span>Aujuda</span>
+
     </a>
 
+
     <nav class="desktop-nav" aria-label="Navegação principal">
+
       <a href="#como-funciona">Como funciona</a>
       <a href="#buscar">Buscar</a>
       <a href="#sobre">Sobre</a>
+
     </nav>
 
+
     <div class="header-actions">
-      <button class="btn btn-ghost btn-small" data-open="auth">Entrar</button>
-      <button class="btn btn-primary btn-small magnetic" data-open="register-pet">Cadastrar animal</button>
-      <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false">
-        <span></span><span></span>
-      </button>
-    </div>
-  </header>
 
-  <div class="mobile-menu" aria-hidden="true">
-    <a href="#como-funciona">Como funciona</a>
-    <a href="#buscar">Buscar</a>
-    <a href="#sobre">Sobre</a>
-    <button class="btn btn-primary" data-open="register-pet">Cadastrar animal</button>
-  </div>
-
-  <main>
-    <section class="hero section-shell">
-      <div class="hero-copy reveal">
-        <div class="eyebrow"><span class="live-dot"></span> Tecnologia com propósito</div>
-        <h1>Uma rede para <span class="gradient-text">reencontros.</span></h1>
-        <p class="hero-lead">Cadastre um animal perdido, filtre buscas por características e ajude informações importantes a chegarem às pessoas certas.</p>
-        <div class="hero-actions">
-          <button class="btn btn-primary btn-large magnetic" data-open="register-pet">
-            <span>Cadastrar animal</span>
-            <span class="btn-icon">↗</span>
-          </button>
-          <a class="btn btn-glass btn-large" href="#buscar">
-            <span>Buscar agora</span>
-            <span class="btn-icon">⌕</span>
-          </a>
-        </div>
-        <div class="hero-trust">
-          <div class="mini-avatars" aria-hidden="true"><span>🐶</span><span>🐱</span><span>🐾</span></div>
-          <p><strong>Simples, gratuito e direto.</strong><br>Uma ideia que nasceu em C e ganhou uma nova interface.</p>
-        </div>
+      <!-- Só aparece depois que o usuário entrar -->
+      <div id="userGreeting" hidden>
+        Olá! <strong id="userFirstName"></strong>
       </div>
 
+
+      <!-- Some depois que o usuário entrar -->
+      <button
+        class="btn btn-ghost btn-small"
+        id="loginButton"
+        data-open="auth"
+      >
+        Entrar
+      </button>
+
+
+      <!-- Continua aparecendo mesmo logado -->
+      <button
+        class="btn btn-primary btn-small magnetic"
+        data-open="register-pet"
+      >
+        Cadastrar animal
+      </button>
+
+
+      <button
+        class="menu-btn"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+
+
+    <div class="mobile-menu" aria-hidden="true">
+
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#buscar">Buscar</a>
+      <a href="#sobre">Sobre</a>
+
+      <button
+        class="btn btn-primary"
+        data-open="register-pet"
+      >
+        Cadastrar animal
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================================
+       CONTEÚDO PRINCIPAL
+       ========================================= -->
+
+  <main>
+
+
+    <!-- HERO -->
+
+    <section class="hero section-shell">
+
+      <div class="hero-copy reveal">
+
+        <div class="eyebrow">
+          <span class="live-dot"></span>
+          Tecnologia com propósito
+        </div>
+
+        <h1>
+          Uma rede para
+          <span class="gradient-text">reencontros.</span>
+        </h1>
+
+        <p class="hero-lead">
+          Cadastre um animal perdido, filtre buscas por características
+          e ajude informações importantes a chegarem às pessoas certas.
+        </p>
+
+
+        <div class="hero-actions">
+
+          <button
+            class="btn btn-primary btn-large magnetic"
+            data-open="register-pet"
+          >
+
+            <span>Cadastrar animal</span>
+            <span class="btn-icon">↗</span>
+
+          </button>
+
+
+          <a
+            class="btn btn-glass btn-large"
+            href="#buscar"
+          >
+
+            <span>Buscar agora</span>
+            <span class="btn-icon">⌕</span>
+
+          </a>
+
+        </div>
+
+
+        <div class="hero-trust">
+
+          <div class="mini-avatars" aria-hidden="true">
+            <span>🐶</span>
+            <span>🐱</span>
+            <span>🐾</span>
+          </div>
+
+          <p>
+            <strong>Simples, gratuito e direto.</strong>
+            <br>
+            Uma ideia que nasceu em C e ganhou uma nova interface.
+          </p>
+
+        </div>
+
+      </div>
+
+
+
       <div class="hero-visual reveal" data-delay="120">
+
         <div class="orb orb-one"></div>
         <div class="orb orb-two"></div>
+
+
         <div class="device-card tilt-card">
+
           <div class="device-topbar">
-            <span class="status-pill"><span></span> Sistema ativo</span>
-            <span class="device-time">AUJ//01</span>
+
+            <span class="status-pill">
+              <span></span>
+              Sistema ativo
+            </span>
+
+            <span class="device-time">
+              AUJ//01
+            </span>
+
           </div>
-          <div class="device-title">Busca inteligente</div>
-          <p>Encontre por espécie, raça, cor e último local visto.</p>
+
+
+          <div class="device-title">
+            Busca inteligente
+          </div>
+
+
+          <p>
+            Encontre por espécie, raça, cor e último local visto.
+          </p>
+
+
           <div class="scan-area">
+
             <div class="scan-ring ring-1"></div>
             <div class="scan-ring ring-2"></div>
             <div class="scan-ring ring-3"></div>
-            <div class="scan-core">🐾</div>
+
+            <div class="scan-core">
+              🐾
+            </div>
+
             <div class="scan-line"></div>
+
           </div>
+
+
           <div class="device-stats">
-            <div><strong id="heroPetCount">03</strong><span>animais na demo</span></div>
-            <div><strong>4</strong><span>filtros de busca</span></div>
+
+            <div>
+              <strong id="heroPetCount">03</strong>
+              <span>animais na demo</span>
+            </div>
+
+            <div>
+              <strong>4</strong>
+              <span>filtros de busca</span>
+            </div>
+
           </div>
+
         </div>
-        <div class="float-chip chip-one"><span>✓</span> Cadastro concluído</div>
-        <div class="float-chip chip-two"><span>⌖</span> Busca por localização</div>
+
+
+        <div class="float-chip chip-one">
+          <span>✓</span>
+          Cadastro concluído
+        </div>
+
+
+        <div class="float-chip chip-two">
+          <span>⌖</span>
+          Busca por localização
+        </div>
+
       </div>
+
     </section>
 
-    <section class="ticker" aria-label="Características da plataforma">
+
+
+    <!-- TICKER -->
+
+    <section
+      class="ticker"
+      aria-label="Características da plataforma"
+    >
+
       <div class="ticker-track">
-        <span>CADASTRE</span><b>✦</b><span>BUSQUE</span><b>✦</b><span>COMPARTILHE</span><b>✦</b><span>REENCONTRE</span><b>✦</b>
-        <span>CADASTRE</span><b>✦</b><span>BUSQUE</span><b>✦</b><span>COMPARTILHE</span><b>✦</b><span>REENCONTRE</span><b>✦</b>
+
+        <span>CADASTRE</span>
+        <b>✦</b>
+
+        <span>BUSQUE</span>
+        <b>✦</b>
+
+        <span>COMPARTILHE</span>
+        <b>✦</b>
+
+        <span>REENCONTRE</span>
+        <b>✦</b>
+
+
+        <span>CADASTRE</span>
+        <b>✦</b>
+
+        <span>BUSQUE</span>
+        <b>✦</b>
+
+        <span>COMPARTILHE</span>
+        <b>✦</b>
+
+        <span>REENCONTRE</span>
+        <b>✦</b>
+
       </div>
+
     </section>
 
-    <section class="process section-shell" id="como-funciona">
+
+
+    <!-- COMO FUNCIONA -->
+
+    <section
+      class="process section-shell"
+      id="como-funciona"
+    >
+
       <div class="section-heading reveal">
+
         <div>
-          <span class="section-kicker">Fluxo simples</span>
-          <h2>Menos etapas.<br><span class="muted-heading">Mais chances de encontrar.</span></h2>
+
+          <span class="section-kicker">
+            Fluxo simples
+          </span>
+
+          <h2>
+            Menos etapas.
+            <br>
+
+            <span class="muted-heading">
+              Mais chances de encontrar.
+            </span>
+
+          </h2>
+
         </div>
-        <p>O Aujuda organiza as informações essenciais para que o cadastro e a busca sejam rápidos, intuitivos e fáceis de entender.</p>
+
+
+        <p>
+          O Aujuda organiza as informações essenciais para que
+          o cadastro e a busca sejam rápidos, intuitivos
+          e fáceis de entender.
+        </p>
+
       </div>
+
+
 
       <div class="steps-grid">
-        <article class="step-card reveal" data-delay="0">
-          <span class="step-number">01</span>
-          <div class="step-icon">＋</div>
-          <h3>Cadastre</h3>
-          <p>Adicione nome, espécie, raça, cor, foto e o último local onde o animal foi visto.</p>
-          <div class="card-line"></div>
-        </article>
-        <article class="step-card reveal" data-delay="90">
-          <span class="step-number">02</span>
-          <div class="step-icon">⌕</div>
-          <h3>Filtre</h3>
-          <p>Use os dados que você conhece. Nenhum campo precisa ser perfeito para começar uma busca.</p>
-          <div class="card-line"></div>
-        </article>
-        <article class="step-card reveal" data-delay="180">
-          <span class="step-number">03</span>
-          <div class="step-icon">↗</div>
-          <h3>Conecte</h3>
-          <p>Visualize possíveis correspondências e compartilhe o cadastro com quem pode ajudar.</p>
-          <div class="card-line"></div>
-        </article>
-      </div>
-    </section>
 
-    <section class="search-section" id="buscar">
-      <div class="section-shell">
-        <div class="search-panel reveal">
-          <div class="search-header">
-            <div>
-              <span class="section-kicker">Busca de animais</span>
-              <h2>Talvez ele esteja mais perto do que parece.</h2>
-            </div>
-            <div class="result-badge"><span id="resultCount">3</span> resultados</div>
+
+        <article
+          class="step-card reveal"
+          data-delay="0"
+        >
+
+          <span class="step-number">
+            01
+          </span>
+
+          <div class="step-icon">
+            ＋
           </div>
 
-          <form class="search-form" id="searchForm">
-            <label>
-              <span>Espécie</span>
-              <select id="filterSpecies">
-                <option value="">Todas</option>
-                <option>Cachorro</option>
-                <option>Gato</option>
-                <option>Ave</option>
-                <option>Outro</option>
-              </select>
-            </label>
-            <label>
-              <span>Raça</span>
-              <input id="filterBreed" type="text" placeholder="Ex.: SRD, Siamês..." />
-            </label>
-            <label>
-              <span>Cor</span>
-              <input id="filterColor" type="text" placeholder="Ex.: preto, caramelo..." />
-            </label>
-            <label>
-              <span>Local</span>
-              <input id="filterLocation" type="text" placeholder="Bairro, rua ou cidade" />
-            </label>
-            <button class="btn btn-dark search-submit" type="submit"><span>Buscar</span><span>⌕</span></button>
-          </form>
-        </div>
+          <h3>
+            Cadastre
+          </h3>
 
-        <div class="results-toolbar reveal">
-          <p><strong id="resultsLabel">Todos os animais cadastrados</strong><span> — dados desta demonstração ficam apenas no seu navegador.</span></p>
-          <button class="text-button" id="clearFilters">Limpar filtros</button>
-        </div>
+          <p>
+            Adicione nome, espécie, raça, cor, foto e o último
+            local onde o animal foi visto.
+          </p>
 
-        <div class="animal-grid" id="animalGrid" aria-live="polite"></div>
-        <div class="empty-state" id="emptyState" hidden>
-          <div class="empty-icon">⌕</div>
-          <h3>Nenhum resultado encontrado</h3>
-          <p>Tente remover algum filtro ou pesquisar por termos mais amplos.</p>
-          <button class="btn btn-glass" id="emptyClear">Limpar busca</button>
-        </div>
+          <div class="card-line"></div>
+
+        </article>
+
+
+
+        <article
+          class="step-card reveal"
+          data-delay="90"
+        >
+
+          <span class="step-number">
+            02
+          </span>
+
+          <div class="step-icon">
+            ⌕
+          </div>
+
+          <h3>
+            Filtre
+          </h3>
+
+          <p>
+            Use os dados que você conhece. Nenhum campo precisa
+            ser perfeito para começar uma busca.
+          </p>
+
+          <div class="card-line"></div>
+
+        </article>
+
+
+
+        <article
+          class="step-card reveal"
+          data-delay="180"
+        >
+
+          <span class="step-number">
+            03
+          </span>
+
+          <div class="step-icon">
+            ↗
+          </div>
+
+          <h3>
+            Conecte
+          </h3>
+
+          <p>
+            Visualize possíveis correspondências e compartilhe
+            o cadastro com quem pode ajudar.
+          </p>
+
+          <div class="card-line"></div>
+
+        </article>
+
+
       </div>
+
     </section>
 
-    <section class="mission section-shell" id="sobre">
+
+
+    <!-- BUSCA -->
+
+    <section
+      class="search-section"
+      id="buscar"
+    >
+
+      <div class="section-shell">
+
+
+        <div class="search-panel reveal">
+
+
+          <div class="search-header">
+
+            <div>
+
+              <span class="section-kicker">
+                Busca de animais
+              </span>
+
+              <h2>
+                Talvez ele esteja mais perto do que parece.
+              </h2>
+
+            </div>
+
+
+            <div class="result-badge">
+
+              <span id="resultCount">
+                3
+              </span>
+
+              resultados
+
+            </div>
+
+          </div>
+
+
+
+          <form
+            class="search-form"
+            id="searchForm"
+          >
+
+
+            <label>
+
+              <span>
+                Espécie
+              </span>
+
+
+              <select id="filterSpecies">
+
+                <option value="">
+                  Todas
+                </option>
+
+                <option value="Cachorro">
+                  Cachorro
+                </option>
+
+                <option value="Gato">
+                  Gato
+                </option>
+
+                <option value="Ave">
+                  Ave
+                </option>
+
+                <option value="Coelho">
+                  Coelho
+                </option>
+
+                <option value="Hamster">
+                  Hamster
+                </option>
+
+                <option value="Porquinho-da-índia">
+                  Porquinho-da-índia
+                </option>
+
+                <option value="Tartaruga">
+                  Tartaruga
+                </option>
+
+                <option value="Cavalo">
+                  Cavalo
+                </option>
+
+                <option value="Outro">
+                  Outro
+                </option>
+
+              </select>
+
+            </label>
+
+
+
+            <label>
+
+              <span>
+                Raça
+              </span>
+
+              <input
+                id="filterBreed"
+                type="text"
+                placeholder="Ex.: SRD, Siamês..."
+              />
+
+            </label>
+
+
+
+            <label>
+
+              <span>
+                Cor
+              </span>
+
+              <input
+                id="filterColor"
+                type="text"
+                placeholder="Ex.: preto, caramelo..."
+              />
+
+            </label>
+
+
+
+            <label>
+
+              <span>
+                Local
+              </span>
+
+              <input
+                id="filterLocation"
+                type="text"
+                placeholder="Bairro, rua ou cidade"
+              />
+
+            </label>
+
+
+
+            <button
+              class="btn btn-dark search-submit"
+              type="submit"
+            >
+
+              <span>
+                Buscar
+              </span>
+
+              <span>
+                ⌕
+              </span>
+
+            </button>
+
+
+          </form>
+
+        </div>
+
+
+
+        <div class="results-toolbar reveal">
+
+          <p>
+
+            <strong id="resultsLabel">
+              Todos os animais cadastrados
+            </strong>
+
+            <span>
+              — dados desta demonstração ficam apenas no seu navegador.
+            </span>
+
+          </p>
+
+
+          <button
+            class="text-button"
+            id="clearFilters"
+          >
+
+            Limpar filtros
+
+          </button>
+
+        </div>
+
+
+
+        <div
+          class="animal-grid"
+          id="animalGrid"
+          aria-live="polite"
+        ></div>
+
+
+
+        <div
+          class="empty-state"
+          id="emptyState"
+          hidden
+        >
+
+          <div class="empty-icon">
+            ⌕
+          </div>
+
+          <h3>
+            Nenhum resultado encontrado
+          </h3>
+
+          <p>
+            Tente remover algum filtro ou pesquisar
+            por termos mais amplos.
+          </p>
+
+          <button
+            class="btn btn-glass"
+            id="emptyClear"
+          >
+
+            Limpar busca
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- SOBRE -->
+
+    <section
+      class="mission section-shell"
+      id="sobre"
+    >
+
+
       <div class="mission-visual reveal">
+
         <div class="mission-card">
-          <span class="mission-label">ORIGEM // C → WEB</span>
+
+          <span class="mission-label">
+            ORIGEM // C → WEB
+          </span>
+
+
           <div class="code-window">
-            <div class="code-bar"><span></span><span></span><span></span></div>
+
+            <div class="code-bar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+
             <pre><code><span class="code-muted">// objetivo original</span>
 <span class="code-key">void</span> cadastrarAnimal() {
   nome;
@@ -206,110 +769,1213 @@
 
 <span class="code-muted">// evolução</span>
 <span class="code-good">Aujuda.web();</span></code></pre>
+
           </div>
+
         </div>
+
       </div>
-      <div class="mission-copy reveal" data-delay="120">
-        <span class="section-kicker">Sobre o projeto</span>
-        <h2>Um projeto acadêmico que pode ir além do terminal.</h2>
-        <p>O Aujuda nasceu como um programa desenvolvido em C para cadastrar e buscar animais perdidos. Esta versão web mantém a mesma ideia central, mas apresenta a proposta de forma mais visual, acessível e pronta para um portfólio.</p>
+
+
+
+      <div
+        class="mission-copy reveal"
+        data-delay="120"
+      >
+
+        <span class="section-kicker">
+          Sobre o projeto
+        </span>
+
+
+        <h2>
+          Um projeto acadêmico que pode ir além do terminal.
+        </h2>
+
+
+        <p>
+          O Aujuda nasceu como um programa desenvolvido em C para
+          cadastrar e buscar animais perdidos. Esta versão web mantém
+          a mesma ideia central, mas apresenta a proposta de forma mais
+          visual, acessível e pronta para um portfólio.
+        </p>
+
+
+
         <div class="mission-points">
-          <div><span>01</span><p><strong>Propósito social</strong>Uma solução simples para uma situação real.</p></div>
-          <div><span>02</span><p><strong>Evolução técnica</strong>Do terminal para uma experiência web interativa.</p></div>
-          <div><span>03</span><p><strong>Pronto para expandir</strong>Base preparada para receber backend e banco de dados no futuro.</p></div>
+
+
+          <div>
+
+            <span>
+              01
+            </span>
+
+            <p>
+              <strong>
+                Propósito social
+              </strong>
+
+              Uma solução simples para uma situação real.
+            </p>
+
+          </div>
+
+
+
+          <div>
+
+            <span>
+              02
+            </span>
+
+            <p>
+              <strong>
+                Evolução técnica
+              </strong>
+
+              Do terminal para uma experiência web interativa.
+            </p>
+
+          </div>
+
+
+
+          <div>
+
+            <span>
+              03
+            </span>
+
+            <p>
+              <strong>
+                Pronto para expandir
+              </strong>
+
+              Base preparada para receber backend
+              e banco de dados no futuro.
+            </p>
+
+          </div>
+
+
         </div>
+
       </div>
+
     </section>
+
+
+
+    <!-- CTA -->
 
     <section class="cta section-shell reveal">
+
       <div class="cta-box">
+
         <div class="cta-glow"></div>
-        <span class="section-kicker light">Faça parte da rede</span>
-        <h2>Uma informação pode ser o começo de um reencontro.</h2>
-        <p>Cadastre um animal perdido ou consulte os registros disponíveis na demonstração.</p>
+
+
+        <span class="section-kicker light">
+          Faça parte da rede
+        </span>
+
+
+        <h2>
+          Uma informação pode ser o começo de um reencontro.
+        </h2>
+
+
+        <p>
+          Cadastre um animal perdido ou consulte
+          os registros disponíveis na demonstração.
+        </p>
+
+
         <div class="cta-actions">
-          <button class="btn btn-white btn-large magnetic" data-open="register-pet">Cadastrar animal <span>↗</span></button>
-          <a class="btn btn-outline-light btn-large" href="#buscar">Fazer uma busca</a>
+
+
+          <button
+            class="btn btn-white btn-large magnetic"
+            data-open="register-pet"
+          >
+
+            Cadastrar animal
+
+            <span>
+              ↗
+            </span>
+
+          </button>
+
+
+          <a
+            class="btn btn-outline-light btn-large"
+            href="#buscar"
+          >
+
+            Fazer uma busca
+
+          </a>
+
+
         </div>
+
       </div>
+
     </section>
+
+
   </main>
 
+
+
+  <!-- =========================================
+       FOOTER
+       ========================================= -->
+
   <footer>
+
     <div class="section-shell footer-inner">
+
+
       <div>
-        <a class="brand" href="#topo"><span class="brand-mark mini">🐾</span><span>Aujuda</span></a>
-        <p>Encontre. Cadastre. Reencontre.</p>
+
+        <a
+          class="brand"
+          href="#topo"
+        >
+
+          <span class="brand-mark mini">
+            🐾
+          </span>
+
+          <span>
+            Aujuda
+          </span>
+
+        </a>
+
+
+        <p>
+          Encontre. Cadastre. Reencontre.
+        </p>
+
       </div>
+
+
+
       <div class="footer-links">
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#buscar">Buscar</a>
-        <a href="#sobre">Sobre</a>
+
+        <a href="#como-funciona">
+          Como funciona
+        </a>
+
+        <a href="#buscar">
+          Buscar
+        </a>
+
+        <a href="#sobre">
+          Sobre
+        </a>
+
       </div>
-      <p class="copyright">© <span id="year"></span> Todos os direitos reservados a Marcelo Guedes.</p>
+
+
+
+      <p class="copyright">
+
+        ©
+
+        <span id="year"></span>
+
+        Todos os direitos reservados a Marcelo Guedes.
+
+      </p>
+
+
     </div>
+
   </footer>
 
-  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true"></div>
 
-  <section class="modal" id="register-pet" role="dialog" aria-modal="true" aria-labelledby="petModalTitle" aria-hidden="true">
-    <button class="modal-close" data-close aria-label="Fechar">×</button>
+
+  <!-- =========================================
+       FUNDO DOS MODAIS
+       ========================================= -->
+
+  <div
+    class="modal-backdrop"
+    id="modalBackdrop"
+    aria-hidden="true"
+  ></div>
+
+
+
+  <!-- =========================================
+       CADASTRO DE ANIMAL
+       ========================================= -->
+
+  <section
+    class="modal"
+    id="register-pet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="petModalTitle"
+    aria-hidden="true"
+  >
+
+
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Fechar"
+    >
+      ×
+    </button>
+
+
+
     <div class="modal-heading">
-      <span class="section-kicker">Novo cadastro</span>
-      <h2 id="petModalTitle">Cadastre seu aumigo.</h2>
-      <p>Preencha o que souber. Você poderá complementar as informações depois.</p>
+
+      <span class="section-kicker">
+        Novo cadastro
+      </span>
+
+
+      <h2 id="petModalTitle">
+        Cadastre seu aumigo.
+      </h2>
+
+
+      <p>
+        Preencha o que souber.
+        Você poderá complementar as informações depois.
+      </p>
+
     </div>
-    <form class="pet-form" id="petForm">
-      <div class="photo-upload" id="photoUpload">
-        <input type="file" id="petPhoto" accept="image/*" hidden />
-        <div class="photo-preview" id="photoPreview"><span>＋</span><small>Adicionar foto</small></div>
-        <div><strong>Foto do animal</strong><p>Ajuda muito na identificação. JPG, PNG ou WEBP.</p></div>
+
+
+
+    <form
+      class="pet-form"
+      id="petForm"
+    >
+
+
+      <!-- FOTO -->
+
+      <div
+        class="photo-upload"
+        id="photoUpload"
+      >
+
+
+        <input
+          type="file"
+          id="petPhoto"
+          accept="image/*"
+          hidden
+        />
+
+
+        <div
+          class="photo-preview"
+          id="photoPreview"
+        >
+
+          <span>
+            ＋
+          </span>
+
+          <small>
+            Adicionar foto
+          </small>
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            Foto do animal
+          </strong>
+
+          <p>
+            Ajuda muito na identificação.
+            JPG, PNG ou WEBP.
+          </p>
+
+        </div>
+
+
       </div>
+
+
+
       <div class="form-grid">
-        <label><span>Nome do animal</span><input name="name" required placeholder="Ex.: Thor" /></label>
-        <label><span>Espécie</span>
-          <select name="species" id="petSpecies" required>
-            <option value="">Selecione</option><option>Cachorro</option><option>Gato</option><option>Ave</option><option value="Outro">Outro</option>
-          </select>
+
+
+        <!-- NOME -->
+
+        <label>
+
+          <span>
+            Nome do animal
+          </span>
+
+          <input
+            name="name"
+            required
+            placeholder="Ex.: Thor"
+          />
+
         </label>
-        <label class="full custom-species" id="customSpeciesWrap" hidden><span>Qual espécie?</span><input id="customSpecies" placeholder="Digite a espécie" /></label>
-        <label><span>Raça</span><input name="breed" placeholder="Ex.: SRD" /></label>
-        <label><span>Cor</span><input name="color" required placeholder="Ex.: Caramelo" /></label>
-        <label class="full"><span>Último local visto</span><input name="location" required placeholder="Rua, bairro ou ponto de referência" /></label>
+
+
+
+        <!-- ESPÉCIE -->
+
+        <label>
+
+          <span>
+            Espécie
+          </span>
+
+
+          <select
+            name="species"
+            id="petSpecies"
+            required
+          >
+
+            <option value="">
+              Selecione
+            </option>
+
+
+            <option value="Cachorro">
+              Cachorro
+            </option>
+
+
+            <option value="Gato">
+              Gato
+            </option>
+
+
+            <option value="Ave">
+              Ave
+            </option>
+
+
+            <option value="Coelho">
+              Coelho
+            </option>
+
+
+            <option value="Hamster">
+              Hamster
+            </option>
+
+
+            <option value="Porquinho-da-índia">
+              Porquinho-da-índia
+            </option>
+
+
+            <option value="Tartaruga">
+              Tartaruga
+            </option>
+
+
+            <option value="Cavalo">
+              Cavalo
+            </option>
+
+
+            <option value="Outro">
+              Outro
+            </option>
+
+          </select>
+
+        </label>
+
+
+
+        <!--
+          ESTE CAMPO COMEÇA ESCONDIDO.
+          SÓ APARECE QUANDO O USUÁRIO
+          ESCOLHER "OUTRO".
+        -->
+
+        <label
+          class="full custom-species"
+          id="customSpeciesWrap"
+          hidden
+        >
+
+          <span>
+            Qual espécie?
+          </span>
+
+
+          <input
+            id="customSpecies"
+            placeholder="Digite a espécie"
+          />
+
+        </label>
+
+
+
+        <!-- RAÇA -->
+
+        <label>
+
+          <span>
+            Raça
+          </span>
+
+          <input
+            name="breed"
+            placeholder="Ex.: SRD"
+          />
+
+        </label>
+
+
+
+        <!-- COR -->
+
+        <label>
+
+          <span>
+            Cor
+          </span>
+
+          <input
+            name="color"
+            required
+            placeholder="Ex.: Caramelo"
+          />
+
+        </label>
+
+
+
+        <!-- LOCAL -->
+
+        <label class="full">
+
+          <span>
+            Último local visto
+          </span>
+
+          <input
+            name="location"
+            required
+            placeholder="Rua, bairro ou ponto de referência"
+          />
+
+        </label>
+
+
       </div>
-      <button class="btn btn-primary btn-large full-button" type="submit">Finalizar cadastro <span>↗</span></button>
+
+
+
+      <button
+        class="btn btn-primary btn-large full-button"
+        type="submit"
+      >
+
+        Finalizar cadastro
+
+        <span>
+          ↗
+        </span>
+
+      </button>
+
+
     </form>
+
   </section>
 
-  <section class="modal auth-modal" id="auth" role="dialog" aria-modal="true" aria-labelledby="authTitle" aria-hidden="true">
-    <button class="modal-close" data-close aria-label="Fechar">×</button>
+
+
+  <!-- =========================================
+       LOGIN / CADASTRO
+       ========================================= -->
+
+  <section
+    class="modal auth-modal"
+    id="auth"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="authTitle"
+    aria-hidden="true"
+  >
+
+
+    <button
+      class="modal-close"
+      data-close
+      aria-label="Fechar"
+    >
+      ×
+    </button>
+
+
+
     <div class="modal-heading">
-      <span class="section-kicker">Área do usuário</span>
-      <h2 id="authTitle">Entre no Aujuda.</h2>
-      <p>Demonstração local: nenhuma informação é enviada para um servidor.</p>
+
+      <span class="section-kicker">
+        Área do usuário
+      </span>
+
+      <h2 id="authTitle">
+        Entre no Aujuda.
+      </h2>
+
+      <p>
+        Demonstração local:
+        nenhuma informação é enviada para um servidor.
+      </p>
+
     </div>
+
+
+
     <div class="auth-tabs">
-      <button class="active" data-auth-tab="login">Entrar</button>
-      <button data-auth-tab="signup">Criar conta</button>
+
+      <button
+        class="active"
+        data-auth-tab="login"
+      >
+        Entrar
+      </button>
+
+
+      <button
+        data-auth-tab="signup"
+      >
+        Criar conta
+      </button>
+
     </div>
-    <form class="auth-form active" id="loginForm" data-auth-panel="login">
-      <label><span>E-mail</span><input type="email" required placeholder="voce@email.com" /></label>
-      <label><span>Senha</span><input type="password" required placeholder="••••••••" /></label>
-      <button class="btn btn-dark btn-large full-button" type="submit">Entrar</button>
+
+
+
+    <!-- LOGIN -->
+
+    <form
+      class="auth-form active"
+      id="loginForm"
+      data-auth-panel="login"
+    >
+
+
+      <label>
+
+        <span>
+          E-mail
+        </span>
+
+        <input
+          type="email"
+          required
+          placeholder="voce@email.com"
+        />
+
+      </label>
+
+
+
+      <label>
+
+        <span>
+          Senha
+        </span>
+
+        <input
+          type="password"
+          required
+          placeholder="••••••••"
+        />
+
+      </label>
+
+
+
+      <button
+        class="btn btn-dark btn-large full-button"
+        type="submit"
+      >
+        Entrar
+      </button>
+
+
     </form>
-    <form class="auth-form" id="signupForm" data-auth-panel="signup">
-      <label><span>Nome completo</span><input type="text" required placeholder="Seu nome" /></label>
-      <label><span>E-mail</span><input type="email" required placeholder="voce@email.com" /></label>
-      <label><span>Senha</span><input type="password" minlength="4" required placeholder="Crie uma senha" /></label>
-      <button class="btn btn-primary btn-large full-button" type="submit">Criar conta</button>
+
+
+
+    <!-- CRIAR CONTA -->
+
+    <form
+      class="auth-form"
+      id="signupForm"
+      data-auth-panel="signup"
+    >
+
+
+      <label>
+
+        <span>
+          Nome completo
+        </span>
+
+        <input
+          type="text"
+          required
+          placeholder="Seu nome"
+        />
+
+      </label>
+
+
+
+      <label>
+
+        <span>
+          E-mail
+        </span>
+
+        <input
+          type="email"
+          required
+          placeholder="voce@email.com"
+        />
+
+      </label>
+
+
+
+      <label>
+
+        <span>
+          Senha
+        </span>
+
+        <input
+          type="password"
+          minlength="4"
+          required
+          placeholder="Crie uma senha"
+        />
+
+      </label>
+
+
+
+      <button
+        class="btn btn-primary btn-large full-button"
+        type="submit"
+      >
+        Criar conta
+      </button>
+
+
     </form>
+
   </section>
 
-  <div class="toast" id="toast" role="status" aria-live="polite">
-    <span class="toast-icon">✓</span>
-    <div><strong id="toastTitle">Tudo certo!</strong><p id="toastMessage">Operação concluída.</p></div>
+
+
+  <!-- =========================================
+       NOTIFICAÇÃO
+       ========================================= -->
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  >
+
+    <span class="toast-icon">
+      ✓
+    </span>
+
+
+    <div>
+
+      <strong id="toastTitle">
+        Tudo certo!
+      </strong>
+
+      <p id="toastMessage">
+        Operação concluída.
+      </p>
+
+    </div>
+
   </div>
 
+
+
+  <!-- SCRIPT ORIGINAL DO SITE -->
+
   <script src="script.js"></script>
+
+
+
+  <!-- =========================================
+       CORREÇÕES ADICIONAIS
+       ========================================= -->
+
+  <script>
+
+    /*
+    ============================================
+    CONTROLE DO CAMPO "OUTRO"
+    ============================================
+    */
+
+    const speciesSelect =
+      document.getElementById("petSpecies");
+
+    const customSpeciesWrap =
+      document.getElementById("customSpeciesWrap");
+
+    const customSpecies =
+      document.getElementById("customSpecies");
+
+
+    function atualizarCampoEspecie() {
+
+      if (speciesSelect.value === "Outro") {
+
+        customSpeciesWrap.hidden = false;
+
+        customSpecies.required = true;
+
+        setTimeout(() => {
+          customSpecies.focus();
+        }, 100);
+
+      }
+
+      else {
+
+        customSpeciesWrap.hidden = true;
+
+        customSpecies.required = false;
+
+        customSpecies.value = "";
+
+      }
+
+    }
+
+
+    speciesSelect.addEventListener(
+      "change",
+      atualizarCampoEspecie
+    );
+
+
+    /*
+    Garante que, ao carregar a página,
+    o campo esteja escondido.
+    */
+
+    atualizarCampoEspecie();
+
+
+
+    /*
+    ============================================
+    USUÁRIO LOGADO
+    ============================================
+    */
+
+    function atualizarCabecalhoUsuario() {
+
+      const user = JSON.parse(
+        localStorage.getItem("aujuda_user") || "null"
+      );
+
+
+      const loggedIn =
+        localStorage.getItem("aujuda_logged_in") === "true";
+
+
+      const loginButton =
+        document.getElementById("loginButton");
+
+
+      const userGreeting =
+        document.getElementById("userGreeting");
+
+
+      const userFirstName =
+        document.getElementById("userFirstName");
+
+
+      /*
+      Se existe usuário e ele realizou login
+      */
+
+      if (
+        user &&
+        loggedIn &&
+        user.name
+      ) {
+
+        const primeiroNome =
+          user.name
+            .trim()
+            .split(" ")[0];
+
+
+        /*
+        Esconde botão "Entrar"
+        */
+
+        loginButton.hidden = true;
+
+
+        /*
+        Mostra "Olá! Nome"
+        */
+
+        userGreeting.hidden = false;
+
+        userFirstName.textContent =
+          primeiroNome;
+
+      }
+
+      else {
+
+        /*
+        Usuário não logado
+        */
+
+        loginButton.hidden = false;
+
+        userGreeting.hidden = true;
+
+        userFirstName.textContent = "";
+
+      }
+
+    }
+
+
+
+    /*
+    ============================================
+    DETECTA LOGIN
+    ============================================
+
+    Este evento roda antes do evento existente
+    no script.js.
+
+    Assim conseguimos salvar o estado de login
+    sem precisar alterar seu script.js.
+    */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+
+    loginForm.addEventListener(
+      "submit",
+
+      function () {
+
+        const inputs =
+          this.querySelectorAll("input");
+
+
+        const email =
+          inputs[0].value.trim();
+
+
+        const password =
+          inputs[1].value;
+
+
+        const user =
+          JSON.parse(
+            localStorage.getItem("aujuda_user")
+            || "null"
+          );
+
+
+        /*
+        Só considera logado caso
+        e-mail e senha estejam corretos
+        */
+
+        if (
+          user &&
+          user.email === email &&
+          user.password === password
+        ) {
+
+          localStorage.setItem(
+            "aujuda_logged_in",
+            "true"
+          );
+
+
+          /*
+          Atualiza depois que o script original
+          terminar o processo de login.
+          */
+
+          setTimeout(
+            atualizarCabecalhoUsuario,
+            0
+          );
+
+        }
+
+      },
+
+      true
+    );
+
+
+
+    /*
+    ============================================
+    BUSCA POR ESPÉCIE
+    ============================================
+
+    Atualiza a lógica da busca para considerar
+    as novas espécies adicionadas.
+    */
+
+
+    const especiesConhecidas = [
+
+      "cachorro",
+      "gato",
+      "ave",
+      "coelho",
+      "hamster",
+      "porquinho-da-india",
+      "tartaruga",
+      "cavalo"
+
+    ];
+
+
+    /*
+    Substitui a função de busca antiga,
+    mantendo o resto do sistema funcionando.
+    */
+
+    runSearch = function () {
+
+
+      const species =
+        normalize(
+          document.getElementById(
+            "filterSpecies"
+          ).value
+        );
+
+
+      const breed =
+        normalize(
+          document.getElementById(
+            "filterBreed"
+          ).value
+        );
+
+
+      const color =
+        normalize(
+          document.getElementById(
+            "filterColor"
+          ).value
+        );
+
+
+      const location =
+        normalize(
+          document.getElementById(
+            "filterLocation"
+          ).value
+        );
+
+
+
+      const list =
+        animals.filter(animal => {
+
+
+          const especieAnimal =
+            normalize(animal.species);
+
+
+
+          /*
+          FILTRO DE ESPÉCIE
+          */
+
+          const especieCorresponde =
+
+            !species
+
+            ||
+
+            especieAnimal === species
+
+            ||
+
+            (
+              species === "outro"
+
+              &&
+
+              !especiesConhecidas.includes(
+                especieAnimal
+              )
+            );
+
+
+
+          /*
+          FILTRO DE RAÇA
+          */
+
+          const racaCorresponde =
+
+            !breed
+
+            ||
+
+            normalize(
+              animal.breed
+            ).includes(breed);
+
+
+
+          /*
+          FILTRO DE COR
+          */
+
+          const corCorresponde =
+
+            !color
+
+            ||
+
+            normalize(
+              animal.color
+            ).includes(color);
+
+
+
+          /*
+          FILTRO DE LOCALIZAÇÃO
+          */
+
+          const localCorresponde =
+
+            !location
+
+            ||
+
+            normalize(
+              animal.location
+            ).includes(location);
+
+
+
+          return (
+
+            especieCorresponde
+
+            &&
+
+            racaCorresponde
+
+            &&
+
+            corCorresponde
+
+            &&
+
+            localCorresponde
+
+          );
+
+        });
+
+
+
+      renderAnimals(list);
+
+
+
+      const resultsLabel =
+        document.getElementById(
+          "resultsLabel"
+        );
+
+
+      if (
+        list.length === animals.length
+      ) {
+
+        resultsLabel.textContent =
+          "Todos os animais cadastrados";
+
+      }
+
+      else {
+
+        resultsLabel.textContent =
+
+          `Busca filtrada — ${list.length} correspondência${
+
+            list.length === 1
+              ? ""
+              : "s"
+
+          }`;
+
+      }
+
+    };
+
+
+
+    /*
+    ============================================
+    VERIFICA LOGIN AO ABRIR O SITE
+    ============================================
+
+    Isso faz com que o usuário continue vendo:
+
+    Olá! Marcelo
+
+    mesmo depois de atualizar a página.
+    */
+
+    atualizarCabecalhoUsuario();
+
+  </script>
+
+
 </body>
 </html>
